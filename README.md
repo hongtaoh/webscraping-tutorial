@@ -24,9 +24,9 @@
 ### 一个元素多个类
 如果一个元素的类有两个，比如 `<div class = "a b">`，那么，在定位这个元素时，
 
-  - 如果你用的是 `By.CLASS_NAME`，你需要用 `find_element(By.CLASS_NAME, "a.b"`
-  - 如果你用的是 `By.CSS_SELECTOR`，你需要用 `find_element(By.CSS_SELECTOR, "div.a.b"`
-  - 如果你用的是 `By.XPATH`，你需要用 `find_element(By.XPATH, '//div[@class="a b"]'`
+  - 如果你用的是 `By.CLASS_NAME`，你需要用 `find_element(By.CLASS_NAME, "a.b")`
+  - 如果你用的是 `By.CSS_SELECTOR`，你需要用 `find_element(By.CSS_SELECTOR, "div.a.b")`
+  - 如果你用的是 `By.XPATH`，你需要用 `find_element(By.XPATH, '//div[@class="a b"]')`
 
 ### 多个 child
 
@@ -45,7 +45,7 @@
 上面这个结构中，如果我想要的是 "Up"，可以用 `XPATH`:
 
 ```
-By.XPATH, '//div[@class="initial"]//child::div[2]//child::div[4]'
+By.XPATH, '//div[@class="initial"]/child::div[2]/child::div[4]'
 ```
 
 然后 `.get_attribute('innerHTML')`
@@ -53,9 +53,16 @@ By.XPATH, '//div[@class="initial"]//child::div[2]//child::div[4]'
 如果想要的是 link message here:
 
 ```
-By.XPATH, '//div[@class="initial"]/a'
+By.XPATH, '//div[@class="initial"]//a'
 ```
 
-然后 `.get_attribute('innerHTML')` 或者 `.text`
+然后 `.get_attribute('innerHTML')` 或者 `.text`。
 
+根据 [Sause Labs 的教程](https://saucelabs.com/resources/articles/selenium-tips-css-selectors)，如果是紧挨着的 child，XPATH 用 `/`，CSS SELECTOR 用 `>`。
+
+不管是不是紧挨着，比如当你想从第一级直接到第三级，比如，从 `div.initial` 直接到 `a`，XPATH 用 `//`，CSS SELECTOR 直接用空格，比如 `div a`
+
+### XPATH 教程
+
+W3Schools 有一个很好的 XPATH 教程：https://www.w3schools.com/xml/xpath_syntax.asp
 
