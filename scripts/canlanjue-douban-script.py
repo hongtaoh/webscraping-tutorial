@@ -8,13 +8,15 @@ import re
 import math
 import time 
 import random
+import pyuser_agent
 
 def get_item_num():
     '''get total number of comments
     '''
-    url = 'https://movie.douban.com/subject/34779776/comments?start=100&limit=500&status=P&sort=new_score'
+    url = 'https://movie.douban.com/subject/34779776/comments?start=0&limit=100&status=P&sort=new_score'
+    ua = pyuser_agent.UA()
     headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
+          "User-Agent" : ua.random
     }
     response = requests.get(url=url, headers=headers)
     html = response.text
@@ -25,12 +27,13 @@ def get_item_num():
     item_num = int(re.findall(r'\d+', item_num)[0])
     return item_num
 
-def get_items(page):
+def get_items(page, page_limit):
     '''get comment items in one page
     '''
-    url = f'https://movie.douban.com/subject/34779776/comments?start={page}&limit=50&status=P&sort=new_score'
+    url = f'https://movie.douban.com/subject/34779776/comments?start={page}&limit={page_limit}&status=P&sort=new_score'
+    ua = pyuser_agent.UA()
     headers = {
-        "user-agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
+          "User-Agent" : ua.random
     }
     response = requests.get(url=url, headers=headers)
     html = response.text
@@ -65,14 +68,15 @@ def get_comments(data_dic_list, items):
         data_dic_list.append(dic)
 
 if __name__ == '__main__':
+    page_limit = 100
     item_num = get_item_num()
     # total pages
-    total_pages = math.ceil(item_num / 50)
+    total_pages = math.ceil(item_num / page_limit)
     data_dic_list = []
     for page in range(0, total_pages):
-        items = get_items(page)
+        items = get_items(page, page_limit)
         get_comments(data_dic_list, items)
-        time.sleep(0.2) 
+        time.sleep(0.5+random.uniform(0, 0.5))
         print(f'{page} is done')
     df = pd.DataFrame(data_dic_list)
     df.to_csv('../data/canglangjue_data.csv', index=False)
