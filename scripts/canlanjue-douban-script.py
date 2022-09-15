@@ -28,7 +28,7 @@ def get_item_num():
 def get_items(page):
     '''get comment items in one page
     '''
-    url = f'https://movie.douban.com/subject/34779776/comments?start={page}&limit=500&status=P&sort=new_score'
+    url = f'https://movie.douban.com/subject/34779776/comments?start={page}&limit=50&status=P&sort=new_score'
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
     }
@@ -54,8 +54,8 @@ def get_comments(data_dic_list, items):
         comment_location = i.find(class_='comment-location').text
         comment = i.find(class_='comment-content').text.strip()
         dic = {
-            'account_title': account_title,
-            'account_link': account_link,
+            'username': account_title,
+            'profile_link': account_link,
             'vote_num': vote_num,
             'star': star,
             'comment_time': comment_time,
@@ -67,7 +67,7 @@ def get_comments(data_dic_list, items):
 if __name__ == '__main__':
     item_num = get_item_num()
     # total pages
-    total_pages = math.ceil(item_num / 500)
+    total_pages = math.ceil(item_num / 50)
     data_dic_list = []
     for page in range(0, total_pages):
         items = get_items(page)
